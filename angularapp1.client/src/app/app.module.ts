@@ -11,6 +11,9 @@ import { ProductsComponent } from './pages/products/products.component';
 import { LocationComponent } from './pages/location/location.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { SymbolComponent } from './components/symbol/symbol.component';
+import { CategoryComponent } from './pages/category/category.component';
+import { ProductDetailComponent } from './pages/product-detail/product-detail.component';
+import { FilterPanelComponent } from './components/filter-panel/filter-panel.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { SymbolComponent } from './components/symbol/symbol.component';
     ProductsComponent,
     LocationComponent,
     ProductCardComponent,
-    SymbolComponent
+    SymbolComponent,
+    CategoryComponent,
+    ProductDetailComponent,
+    FilterPanelComponent
   ],
   imports: [
     BrowserModule, HttpClientModule,

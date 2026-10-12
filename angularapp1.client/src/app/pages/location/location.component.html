@@ -1,13 +1,56 @@
-<section class="page">
-  <h1>Visit DS Jewellers</h1>
-  <div class="wrap">
-    <div class="info">
-      <h2>Our Shop</h2>
-      <p><span class="label">Address</span>{{ address }}</p>
-      <p><span class="label">Timings</span>{{ timings }}</p>
-      <p><span class="label">Phone</span>{{ phone }}</p>
-      <a class="call" href="tel:+918874196809">Call Now</a>
-    </div>
-    <iframe [src]="mapUrl" loading="lazy" title="DS Jewellers location"></iframe>
+<section class="vhero">
+  <p class="crumb"><a routerLink="/">Home</a> › Visit Us</p>
+  <h1>Visit {{ shopName }}</h1>
+  <p>See our full collection in person in the heart of Lucknow.</p>
+  <span class="badge" [class.open]="isOpen">{{ isOpen ? '● Open now' : '● Closed now' }}</span>
+</section>
+
+<section class="sec">
+  <div class="cards">
+    <div class="ic"><span class="e">📍</span><h3>Address</h3><p>{{ address }}</p></div>
+    <div class="ic"><span class="e">🕒</span><h3>Timings</h3><p>{{ timings }}</p></div>
+    <div class="ic"><span class="e">📞</span><h3>Phone</h3><p>{{ phone }}</p></div>
+  </div>
+  <div class="acts">
+    <a class="btn" [href]="directionsUrl" target="_blank" rel="noopener">🧭 Get Directions</a>
+    <a class="btn o" [href]="phoneLink">📞 Call Now</a>
+    <a class="btn o" href="https://wa.me/918874196809" target="_blank" rel="noopener">💬 WhatsApp</a>
+  </div>
+</section>
+
+<section class="sec soft">
+  <h2>Find Us on the Map</h2>
+  <div class="ln"></div>
+  <iframe class="map" [src]="mapUrl" loading="lazy" title="DS Jewellers location"></iframe>
+</section>
+
+<section class="sec">
+  <h2>Inside Our Shop</h2>
+  <div class="ln"></div>
+  <div class="photos">
+    @for (p of photos; track p.label) {
+    <figure class="shot">
+      @if (p.src) {
+      <img [src]="p.src" [alt]="p.label" (error)="p.src = ''">
+      } @else {
+      <app-symbol name="ring"></app-symbol>
+      }
+      <figcaption>{{ p.label }}</figcaption>
+    </figure>
+    }
+  </div>
+</section>
+
+<section class="sec soft">
+  <h2>Book a Visit</h2>
+  <div class="ln"></div>
+  <div class="form">
+    <input #n type="text" placeholder="Your name">
+    <input #ph type="tel" placeholder="Phone number" maxlength="14">
+    <textarea #m rows="3" placeholder="What are you looking for? (optional)"></textarea>
+    @if (error) {
+    <p class="err">{{ error }}</p>
+    }
+    <button class="btn" (click)="book(n.value, ph.value, m.value)">Send on WhatsApp</button>
   </div>
 </section>

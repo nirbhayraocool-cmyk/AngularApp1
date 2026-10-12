@@ -1,0 +1,62 @@
+<section class="banner" [style.--a]="category?.a || '#8c1d36'" [style.--b]="category?.b || '#3d0914'">
+  @if (category?.image) {
+  <img class="bimg" [src]="category?.image" [alt]="name" (error)="onImgError()">
+  }
+  <div class="shade"></div>
+  @if (category && !category.image) {
+  <app-symbol class="bart" [name]="category.symbol"></app-symbol>
+  }
+  <div class="btxt">
+    <p class="crumb"><a routerLink="/">Home</a> › {{ category?.name || name }}</p>
+    <h1>{{ category?.name || name }}</h1>
+    <p>{{ products.length }} designs available</p>
+  </div>
+</section>
+
+<section class="layout">
+  <app-filter-panel class="side" [f]="f" [categories]="categories"
+                    [selectedCategory]="category?.name || name"
+                    [metals]="metals" [priceMax]="priceMax"
+                    (categoryPick)="pick($event)" (cleared)="reset()"></app-filter-panel>
+
+  <div class="content">
+    <h2 class="ctitle">{{ category?.name || name }} Collection</h2>
+
+    @if (products.length) {
+    <div class="topbar">
+      <p class="count">{{ filtered.length }} of {{ products.length }} designs</p>
+      <label class="sort">
+        Sort by
+        <select [value]="f.sort" (change)="f.sort = $any($event.target).value">
+          <option value="default">Featured</option>
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="weightAsc">Weight: Low to High</option>
+          <option value="weightDesc">Weight: High to Low</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="grid">
+      @for (p of filtered; track p.id) {
+      <app-product-card [product]="p"></app-product-card>
+      } @empty {
+      <p class="empty">No designs match these filters. Try changing them.</p>
+      }
+    </div>
+    } @else {
+    <p class="empty">No designs in this category yet.</p>
+    <a routerLink="/" class="btn">Back to Home</a>
+    }
+  </div>
+</section>
+
+<section class="sec soft">
+  <h2>You May Also Like</h2>
+  <div class="ln"></div>
+  <div class="grid more">
+    @for (p of more; track p.id) {
+    <app-product-card [product]="p"></app-product-card>
+    }
+  </div>
+</section>

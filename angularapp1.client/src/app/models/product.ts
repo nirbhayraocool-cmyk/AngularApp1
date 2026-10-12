@@ -16,3 +16,10 @@ export interface Category {
   b: string;           // gradient ka doosra rang
   image?: string;      // category ki photo
 }
+export interface Filters {
+  query: string;
+  metal: string;
+  sort: string;
+  maxPrice: number;
+  category: string;
+}

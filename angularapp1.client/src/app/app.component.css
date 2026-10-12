@@ -6,9 +6,67 @@ main {
   min-height: 70vh;
 }
 
+/* ---------- Mobile bottom bar ---------- */
 .bbar {
   display: none;
 }
+
+/* ---------- Floating buttons ---------- */
+.wa {
+  position: fixed;
+  right: 16px;
+  bottom: 18px;
+  z-index: 30;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--maroon-dark);
+  color: #fff;
+  font-size: 1.2rem;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  animation: waPulse 2.2s infinite;
+}
+
+@keyframes waPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6), 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  70% {
+    box-shadow: 0 0 0 16px rgba(37, 211, 102, 0), 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.top {
+  position: fixed;
+  right: 18px;
+  bottom: 86px;
+  z-index: 30;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+  background: var(--maroon-dark);
+  color: var(--gold-light);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: 0.3s;
+}
+
+  .top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
 
 @media (max-width: 600px) {
   .bbar {
@@ -28,4 +86,14 @@ main {
       color: var(--gold-light);
       font-size: 0.85rem;
     }
+
+  /* Mobile par WhatsApp neeche bar me pehle se hai */
+  .wa {
+    display: none;
+  }
+
+  .top {
+    right: 14px;
+    bottom: 70px;
+  }
 }

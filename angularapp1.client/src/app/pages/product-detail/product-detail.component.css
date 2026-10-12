@@ -1,0 +1,184 @@
+.detail {
+  padding: 24px 5% 30px;
+}
+
+.crumb {
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  color: #777;
+}
+
+  .crumb a {
+    color: var(--maroon);
+  }
+
+.dwrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.dphoto {
+  aspect-ratio: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--a, #8c1d36), var(--b, #3d0914));
+  box-shadow: 0 12px 34px rgba(90, 15, 31, 0.25);
+}
+
+  .dphoto app-symbol {
+    width: 60%;
+  }
+
+  .dphoto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+.cat {
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #a8822f;
+}
+
+.dinfo h1 {
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  color: var(--maroon);
+  margin: 6px 0;
+  line-height: 1.15;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--maroon-dark);
+  margin: 6px 0 14px;
+}
+
+.specs {
+  list-style: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 4px 16px;
+  margin-bottom: 12px;
+}
+
+  .specs li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+    .specs li:last-child {
+      border-bottom: 0;
+    }
+
+  .specs span {
+    color: #777;
+  }
+
+.note {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  margin-bottom: 18px;
+}
+
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  padding: 12px 26px;
+  border-radius: 30px;
+  background: var(--maroon);
+  color: var(--gold-light);
+  border: 1.5px solid var(--maroon);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+  .btn:hover {
+    background: var(--maroon-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn.o {
+    background: transparent;
+    color: var(--maroon);
+    border-color: var(--gold);
+  }
+
+    .btn.o:hover {
+      background: var(--gold);
+      color: var(--maroon-dark);
+    }
+
+  .btn.heart.on {
+    color: #e0245e;
+    border-color: #e0245e;
+  }
+
+.sec {
+  padding: 34px 5%;
+  text-align: center;
+}
+
+  .sec h2 {
+    font-size: 1.9rem;
+    color: var(--maroon);
+  }
+
+.ln {
+  width: 60px;
+  height: 3px;
+  background: var(--gold);
+  margin: 8px auto 22px;
+}
+
+.soft {
+  background: linear-gradient(180deg, #fff 0%, var(--cream) 100%);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+  text-align: left;
+}
+
+@media (max-width: 700px) {
+  .dwrap {
+    grid-template-columns: 1fr;
+  }
+
+  .btns .btn {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .sec {
+    padding: 24px 4%;
+  }
+
+    .sec h2 {
+      font-size: 1.5rem;
+    }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}

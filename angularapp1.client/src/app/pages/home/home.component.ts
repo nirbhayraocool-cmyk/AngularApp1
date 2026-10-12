@@ -4,6 +4,7 @@ import GLightbox from 'glightbox';
 import { Category, Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { Router } from '@angular/router';
 
 register();
 
@@ -20,7 +21,7 @@ interface VideoItem { title: string; symbol: string; src: string; poster: string
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // ---------- Hero slider ----------
-  // image: yahan apni photo ka path ya URL likho
+  // image: photo
   slides: Slide[] = [
     { bg: 'radial-gradient(circle at 75% 50%, #8c1d36, #3d0914 72%)', image: 'https://plus.unsplash.com/premium_photo-1681486928780-67d70f1ea3c2?q=80&w=832&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', symbol: 'ring', tag: 'Welcome to DS Jewellers', title: 'Timeless Gold Rings', text: 'Designs that celebrate every precious moment.', btn: 'Shop Now' },
     { bg: 'radial-gradient(circle at 75% 50%, #8a5a14, #2a1204 72%)', image: 'https://plus.unsplash.com/premium_photo-1724762183134-c17cf5f5bed2?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', symbol: 'necklace', tag: 'Bridal Collection', title: 'Make Your Day Shine', text: 'Necklace sets for the perfect wedding look.', btn: 'Explore Bridal' },
@@ -48,9 +49,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   all: Product[];
   cat = 'All';
   query = '';
+  sort = 'default';
+  metal = 'All';
+  metals = ['All', 'Gold', 'Diamond', 'Silver'];
+  priceMax = 0;
+  maxPrice = 0;
 
   // ---------- Video ----------
-  videoSrc = 'videos/hero.mp4';          // asli video lagane par likho:
+  videoSrc = 'videos/hero.mp4';     
   paused = false;
 
   // ---------- Occasions, reviews ----------
@@ -68,6 +74,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     { name: 'Anita K.', text: 'Bought a pendant as a gift and she loved it.' }
   ];
 
+  // ---------- Offers banner ----------
+  offers = [
+    { icon: '✨', title: 'Festive Collection', text: 'Visit DS Jewellers, Hazratganj, Lucknow for our latest festive designs.' },
+    { icon: '💎', title: 'Making Charges', text: 'Ask us about special making charges on gold jewellery.' },
+    { icon: '📞', title: "Today's Offers", text: "Call or WhatsApp +91 88741 96809 to know today's offers." }
+  ];
+  offerIndex = 0;
+  private offerTimer: any;
+
   // ---------- Occasions slider ----------
   occTrack: Occasion[] = [...this.occasions, ...this.occasions];
   opos = 0;
@@ -83,7 +98,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   videos: VideoItem[] = [
     { title: 'Diamond 360° View', symbol: 'diamond', src: 'videos/v1.mp4', poster: '' },
     { title: 'Bridal Necklace Shine', symbol: 'necklace', src: 'videos/v2.mp4', poster: '' },
-    { title: 'Gold Bangles Spin', symbol: 'bangle', src: 'videos/v3.mp4', poster: '' }
+    { title: 'Gold Bangles Spin', symbol: 'bangle', src: 'videos/v3.mp4', poster: '' },
+    { title: 'Diamond 360° View', symbol: 'diamond', src: 'videos/v4.mp4', poster: '' },
+    { title: 'Bridal Necklace Shine', symbol: 'necklace', src: 'videos/v5.mp4', poster: '' },
+    { title: 'Gold Bangles Spin', symbol: 'bangle', src: 'videos/v6.mp4', poster: '' }
   ];
   videoLoop: VideoItem[] = [...this.videos, ...this.videos];
 
@@ -98,10 +116,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     productService: ProductService,
     public wishlist: WishlistService,
-    private host: ElementRef<HTMLElement>
+    private host: ElementRef<HTMLElement>,
+    private router: Router
   ) {
     this.categories = productService.categories;
     this.all = productService.getAll();
+    this.priceMax = Math.ceil(Math.max(...this.all.map(p => p.price)) / 10000) * 10000;
+    this.maxPrice = this.priceMax;
     this.chips = ['All', ...this.categories.map(c => c.name), 'Saved'];
   }
 
@@ -111,6 +132,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     window.addEventListener('resize', this.onResize);
     this.startAuto();
     this.startOccAuto();
+    this.offerTimer = setInterval(() => (this.offerIndex = (this.offerIndex + 1) % this.offers.length), 4000);
   }
 
   ngAfterViewInit(): void {
@@ -136,6 +158,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     clearInterval(this.timer);
     clearTimeout(this.fallback);
     clearInterval(this.otimer);
+    clearInterval(this.offerTimer);
     clearTimeout(this.ofallback);
     window.removeEventListener('resize', this.onResize);
     this.observer?.disconnect();
@@ -276,17 +299,33 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // ---------- Collection ----------
   get filtered(): Product[] {
     const q = this.query.trim().toLowerCase();
-    return this.all.filter(p => {
+    const list = this.all.filter(p => {
       const inCat = this.cat === 'All' ? true
         : this.cat === 'Saved' ? this.wishlist.has(p.id)
           : p.category === this.cat;
-      return inCat && p.name.toLowerCase().includes(q);
+      const inMetal = this.metal === 'All' || p.metal.toLowerCase().includes(this.metal.toLowerCase());
+      return inCat && inMetal && p.price <= this.maxPrice && p.name.toLowerCase().includes(q);
     });
+
+    switch (this.sort) {
+      case 'priceAsc': list.sort((a, b) => a.price - b.price); break;
+      case 'priceDesc': list.sort((a, b) => b.price - a.price); break;
+      case 'weightAsc': list.sort((a, b) => a.weight - b.weight); break;
+      case 'weightDesc': list.sort((a, b) => b.weight - a.weight); break;
+    }
+    return list;
+  }
+
+  resetFilters(): void {
+    this.cat = 'All';
+    this.query = '';
+    this.metal = 'All';
+    this.sort = 'default';
+    this.maxPrice = this.priceMax;
   }
 
   pick(category: string): void {
-    this.cat = category;
-    this.scrollToShop();
+    this.router.navigate(['/category', category]);
   }
 
   scrollToShop(): void {

@@ -151,8 +151,8 @@
   display: inline-block;
   padding: 11px 26px;
   border-radius: 30px;
-  background: var(--gold);
-  color: var(--maroon-dark);
+  background: var(--maroon-dark);
+  color: var(--gold);
   font-weight: 500;
   font-family: inherit;
   font-size: 1rem;
@@ -162,7 +162,7 @@
 }
 
   .btn:hover {
-    background: var(--gold-light);
+    background: var(--maroon-dark);
     transform: translateY(-2px);
   }
 
@@ -250,7 +250,7 @@
 /* Categories */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
 }
 
@@ -1148,4 +1148,207 @@ swiper-slide.swiper-slide-active .vc {
   swiper-container::part(button-prev), swiper-container::part(button-next) {
     display: none;
   }
+}
+/* ---------- Sort & filter ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.fi {
+  padding: 8px 16px;
+  border-radius: 22px;
+  border: 1.5px solid var(--gold);
+  background: var(--card);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--maroon);
+}
+
+  .range input {
+    accent-color: var(--gold);
+    width: 150px;
+  }
+
+.reset {
+  padding: 8px 18px;
+  border-radius: 22px;
+  border: 1.5px solid var(--maroon);
+  background: transparent;
+  color: var(--maroon);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+  .reset:hover {
+    background: var(--maroon);
+    color: var(--gold-light);
+  }
+
+.count {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+  .fi {
+    flex: 1 1 45%;
+    font-size: 16px;
+  }
+
+    .fi:first-child {
+      flex-basis: 100%;
+    }
+
+  .range {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+    .range input {
+      width: 60%;
+    }
+}
+/* ---------- Offers banner ---------- */
+.offbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 28px 34px;
+  border-radius: 20px;
+  text-align: left;
+  color: var(--maroon-dark);
+  background: linear-gradient(120deg, #e8d3a0 0%, rgba(0, 0, 0, 0.15) 55%, #e8d3a0 100%);
+  background-size: 200% auto;
+  animation: offShine 6s linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 34px rgba(201, 162, 75, 0.45);
+}
+
+@keyframes offShine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.offbox.reveal.show {
+  animation: offShine 6s linear infinite, up 0.7s ease backwards;
+}
+
+.offbadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  background: var(--maroon-dark);
+  color: var(--gold-light);
+}
+
+.offslide {
+  margin-top: 10px;
+  animation: up 0.6s ease;
+}
+
+  .offslide .oemoji {
+    font-size: 2rem;
+  }
+
+  .offslide h3 {
+    font-size: 1.6rem;
+    color: var(--maroon-dark);
+  }
+
+  .offslide p {
+    max-width: 460px;
+  }
+
+.offdots {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+  .offdots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid var(--maroon-dark);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+    .offdots i.on {
+      width: 26px;
+      border-radius: 6px;
+      background: var(--maroon-dark);
+    }
+
+.offright {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+  .offright .btn {
+    background: var(--maroon-dark);
+    color: var(--gold-light);
+    margin: 0;
+  }
+
+    .offright .btn:hover {
+      background: var(--maroon);
+      transform: translateY(-2px);
+    }
+
+    .offright .btn.o {
+      background: transparent;
+      color: var(--maroon-dark);
+      border: 1.5px solid var(--maroon-dark);
+    }
+
+      .offright .btn.o:hover {
+        background: var(--maroon-dark);
+        color: var(--gold-light);
+      }
+
+@media (max-width: 600px) {
+  .offbox {
+    padding: 22px 18px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offslide h3 {
+    font-size: 1.3rem;
+  }
+
+  .offright {
+    width: 100%;
+  }
+
+    .offright .btn {
+      flex: 1 1 140px;
+      text-align: center;
+      padding: 12px 10px;
+    }
+}
+
+.viewall {
+  margin-top: 26px;
 }

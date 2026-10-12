@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,4 +6,15 @@ import { Component } from '@angular/core';
   standalone: false,
   styleUrl: './app.component.css'
 })
-export class AppComponent { }
+export class AppComponent {
+  showTop = false;
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.showTop = window.scrollY > 400;
+  }
+
+  toTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}

@@ -1,0 +1,56 @@
+@if (product) {
+<section class="detail">
+  <p class="crumb">
+    <a routerLink="/">Home</a> ›
+    <a [routerLink]="['/category', product.category]">{{ product.category }}</a> ›
+    {{ product.name }}
+  </p>
+
+  <div class="dwrap">
+    <div class="dphoto" [style.--a]="colors?.a" [style.--b]="colors?.b">
+      @if (product.image) {
+      <img [src]="product.image" [alt]="product.name" (error)="onImgError()">
+      } @else {
+      <app-symbol [name]="product.symbol"></app-symbol>
+      }
+    </div>
+
+    <div class="dinfo">
+      <p class="cat">{{ product.category }} · {{ product.metal }}</p>
+      <h1>{{ product.name }}</h1>
+      <p class="price">{{ product.price | currency:'INR':'symbol':'1.0-0' }}</p>
+
+      <ul class="specs">
+        <li><span>Category</span><b>{{ product.category }}</b></li>
+        <li><span>Metal</span><b>{{ product.metal }}</b></li>
+        <li><span>Weight</span><b>{{ product.weight }} g</b></li>
+      </ul>
+      <p class="note">Final price is confirmed at the shop, based on weight and making charges.</p>
+
+      <div class="btns">
+        <a class="btn" [href]="whatsappLink" target="_blank" rel="noopener">💬 Enquire on WhatsApp</a>
+        <a class="btn o" href="tel:+918874196809">📞 Call Now</a>
+        <button class="btn o heart" [class.on]="wishlist.has(product.id)" (click)="wishlist.toggle(product.id)">
+          {{ wishlist.has(product.id) ? '♥ Saved' : '♡ Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec soft">
+  <h2>Related Products</h2>
+  <div class="ln"></div>
+  <div class="grid">
+    @for (p of related; track p.id) {
+    <app-product-card [product]="p"></app-product-card>
+    }
+  </div>
+</section>
+} @else {
+<section class="sec">
+  <h2>Product not found</h2>
+  <div class="ln"></div>
+  <a routerLink="/" class="btn">Back to Home</a>
+</section>
+}

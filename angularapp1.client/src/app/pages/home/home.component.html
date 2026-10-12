@@ -53,7 +53,30 @@
     }
   </div>
 </section>
-
+<!-- OFFERS -->
+<section class="sec">
+  <div class="offbox reveal">
+    <div class="offleft">
+      <span class="offbadge">SPECIAL OFFERS</span>
+      @for (o of [offers[offerIndex]]; track o.title) {
+      <div class="offslide">
+        <span class="oemoji">{{ o.icon }}</span>
+        <h3>{{ o.title }}</h3>
+        <p>{{ o.text }}</p>
+      </div>
+      }
+      <div class="offdots">
+        @for (o of offers; track o.title; let i = $index) {
+        <i [class.on]="i === offerIndex" (click)="offerIndex = i"></i>
+        }
+      </div>
+    </div>
+    <div class="offright">
+      <a href="tel:+918874196809" class="btn">📞 Call Now</a>
+      <a href="https://wa.me/918874196809" target="_blank" rel="noopener" class="btn o">💬 WhatsApp</a>
+    </div>
+  </div>
+</section>
 <!-- VIDEO GALLERY -->
 <section class="sec">
   <h2 class="reveal">Watch Our Gallery</h2>
@@ -85,23 +108,55 @@
   <p class="hint">Tap a video to watch it full screen</p>
 </section>
 
+
+
 <!-- COLLECTION -->
 <section class="sec" id="shop">
   <h2 class="reveal">Our Collection</h2>
   <div class="ln"></div>
+
   <div class="bar">
     @for (c of chips; track c) {
     <button [class.on]="c === cat" (click)="cat = c">{{ c === 'Saved' ? '♥ Saved' : c }}</button>
     }
-    <input type="text" placeholder="Search jewellery..." (input)="query = $any($event.target).value">
   </div>
+
+  <div class="filters">
+    <input type="text" class="fi" placeholder="Search jewellery..." [value]="query"
+           (input)="query = $any($event.target).value">
+
+    <select class="fi" [value]="metal" (change)="metal = $any($event.target).value">
+      @for (m of metals; track m) {
+      <option [value]="m">{{ m === 'All' ? 'All metals' : m }}</option>
+      }
+    </select>
+
+    <select class="fi" [value]="sort" (change)="sort = $any($event.target).value">
+      <option value="default">Sort: Featured</option>
+      <option value="priceAsc">Price: Low to High</option>
+      <option value="priceDesc">Price: High to Low</option>
+      <option value="weightAsc">Weight: Low to High</option>
+      <option value="weightDesc">Weight: High to Low</option>
+    </select>
+
+    <label class="range">
+      Up to {{ maxPrice | currency:'INR':'symbol':'1.0-0' }}
+      <input type="range" min="0" [max]="priceMax" step="1000" [value]="maxPrice"
+             (input)="maxPrice = +$any($event.target).value">
+    </label>
+
+    <button class="reset" (click)="resetFilters()">Reset</button>
+  </div>
+  <p class="count">{{ filtered.length }} designs</p>
+
   <div class="grid">
     @for (p of filtered; track p.id; let i = $index) {
     <app-product-card class="pop" [product]="p" [style.animation-delay.ms]="i * 70"></app-product-card>
     } @empty {
-    <p class="empty">No items found</p>
+    <p class="empty">No items found. Try changing the filters.</p>
     }
   </div>
+  <a routerLink="/products" class="btn viewall">View Full Collection →</a>
 </section>
 
 <!-- BIG VIDEO BANNER -->
@@ -234,7 +289,13 @@
   <p>See the full collection in person, or talk to us right now.</p>
   <div class="cta-btns">
     <a href="tel:+918874196809" class="btn">📞 Call Now</a>
-    <a href="https://wa.me/918874196809" target="_blank" rel="noopener" class="btn o">💬 WhatsApp</a>
+    <a href="https://wa.me/918874196809?text=Hi%2C%20I%20am%20interested%20in%20DS%20Jewellers%20collection"
+       target="_blank"
+       rel="noopener"
+       class="btn o">
+      💬 WhatsApp
+    </a>
+
     <a routerLink="/location" class="btn o wide">📍 Get Directions</a>
   </div>
 </section>

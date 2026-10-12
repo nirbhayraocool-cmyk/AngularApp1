@@ -1,16 +1,56 @@
-<section class="page">
-  <h1>Our Collection</h1>
-  <p class="sub">Choose a category to explore our designs</p>
-
-  <div class="chips">
-    @for (c of categories; track c) {
-    <button [class.active]="c === selected" (click)="selected = c">{{ c }}</button>
-    }
+<!--<section class="banner">
+  <div class="btxt">
+    <p class="crumb"><a routerLink="/">Home</a> › Collection</p>
+    <h1>Our Collection</h1>
+    <p>{{ all.length }} designs across {{ categories.length - 2 }} categories</p>
   </div>
+  <app-symbol class="bart" name="necklace"></app-symbol>
+</section>-->
 
-  <div class="grid">
-    @for (p of filtered; track p.id) {
-    <app-product-card [product]="p"></app-product-card>
-    }
+<section class="layout">
+  <app-filter-panel class="side" [f]="f" [categories]="categories" [selectedCategory]="f.category"
+                    [metals]="metals" [priceMax]="priceMax"
+                    (categoryPick)="pick($event)" (cleared)="reset()"></app-filter-panel>
+
+  <div class="content">
+    <div class="topbar">
+      <p class="count">
+        @if (f.category === 'Saved') {
+        ♥ Saved:
+        }
+        {{ filtered.length }} of {{ baseCount }} designs
+      </p>
+      <div class="tools">
+        @if (f.category === 'Saved' && wishlist.count() > 0) {
+        <button class="share" (click)="shareSaved()">💬 Send my list on WhatsApp</button>
+        }
+        <label class="sort">
+          Sort by
+          <select [value]="f.sort" (change)="f.sort = $any($event.target).value">
+            <option value="default">Featured</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+            <option value="weightAsc">Weight: Low to High</option>
+            <option value="weightDesc">Weight: High to Low</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid">
+      @for (p of filtered; track p.id) {
+      <app-product-card [product]="p"></app-product-card>
+      } @empty {
+      @if (f.category === 'Saved' && wishlist.count() === 0) {
+      <div class="emptybox">
+        <p class="big">♡</p>
+        <p>You haven't saved any designs yet.</p>
+        <p>Tap the ♥ on any design to save it here.</p>
+      </div>
+      } @else {
+      <p class="empty">No designs match these filters. Try changing them.</p>
+      }
+      }
+    </div>
   </div>
 </section>

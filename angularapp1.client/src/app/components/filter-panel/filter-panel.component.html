@@ -1,0 +1,55 @@
+<aside class="panel" [class.open]="open">
+  <button class="toggle" (click)="open = !open">
+    ⚙ Filters
+    @if (active) {
+    <span class="badge">{{ active }}</span>
+    }
+  </button>
+
+  <div class="body">
+    <div class="head">
+      <h3>Filters</h3>
+      <button class="clear" (click)="cleared.emit()">Clear all</button>
+    </div>
+
+    <div class="grp">
+      <h4>Search</h4>
+      <input type="text" placeholder="Search jewellery..." [value]="f.query"
+             (input)="f.query = $any($event.target).value">
+    </div>
+
+    <div class="grp">
+      <h4>Category</h4>
+      <ul class="list">
+        @for (c of categories; track c) {
+        <li><button [class.on]="c === selectedCategory" (click)="categoryPick.emit(c)">{{ c === 'Saved' ? '♥ Saved' : c }}</button></li>
+        }
+      </ul>
+    </div>
+
+    <div class="grp">
+      <h4>Metal</h4>
+      <ul class="checks">
+        @for (m of metals; track m) {
+        <li>
+          <label>
+            <input type="radio" name="metal" [checked]="m === f.metal" (change)="f.metal = m">
+            <span>{{ m === 'All' ? 'All metals' : m }}</span>
+          </label>
+        </li>
+        }
+      </ul>
+    </div>
+
+    <div class="grp last">
+      <h4>Price</h4>
+      <p class="pv">Up to {{ f.maxPrice | currency:'INR':'symbol':'1.0-0' }}</p>
+      <input type="range" min="0" [max]="priceMax" step="500" [value]="f.maxPrice"
+             (input)="f.maxPrice = +$any($event.target).value">
+      <div class="scale">
+        <span>₹0</span>
+        <span>{{ priceMax | currency:'INR':'symbol':'1.0-0' }}</span>
+      </div>
+    </div>
+  </div>
+</aside>
