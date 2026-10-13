@@ -1,0 +1,17 @@
+<section class="wrap">
+  <form class="box" (submit)="submit($event, u.value, p.value)">
+    <p class="lock">🔒</p>
+    <h1>Admin Login</h1>
+    <p class="sub">DS Jewellers shop panel</p>
+
+    <input #u type="text" placeholder="Username" autocomplete="username">
+    <input #p type="password" placeholder="Password" autocomplete="current-password">
+
+    @if (error) {
+    <p class="err">{{ error }}</p>
+    }
+
+    <button type="submit" class="btn" [disabled]="busy">{{ busy ? 'Signing in...' : 'Sign in' }}</button>
+    <a routerLink="/" class="back">← Back to website</a>
+  </form>
+</section>

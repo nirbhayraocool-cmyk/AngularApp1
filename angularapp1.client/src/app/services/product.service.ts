@@ -1,3 +1,5 @@
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Category, Filters, Product } from '../models/product';
 
@@ -36,6 +38,43 @@ export class ProductService {
     { id: 15, name: ' Payal Pair', category: 'Anklets', metal: 'Silver', weight: 45, price: 5200, symbol: 'bangle', image:'https://images.unsplash.com/photo-1599799045747-9dbfcfef6b97?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
     { id: 16, name: 'Anklet with Bells', category: 'Anklets', metal: 'Silver', weight: 38, price: 4400, symbol: 'bangle', image:'https://images.unsplash.com/photo-1599799045647-84b0ef3b2abb?q=80&w=967&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
   ];
+
+  constructor(private http: HttpClient) { }
+
+  // Gehne database (API) se laao. API na chale to upar ke namune wale gehne dikhte rahenge.
+  async load(): Promise<void> {
+    try {
+      const list = await firstValueFrom(this.http.get<Product[]>('/api/products'));
+      this.products = list.map(p => ({ ...p, image: p.image || undefined }));
+    } catch {
+      // API band ho to purana ya namune wala data chalta rahega
+    }
+  }
+
+  async add(p: Product): Promise<void> {
+    await firstValueFrom(this.http.post<Product>('/api/products', this.toApi(p)));
+    await this.load();
+  }
+
+  async update(p: Product): Promise<void> {
+    await firstValueFrom(this.http.put<void>(`/api/products/${p.id}`, this.toApi(p)));
+    await this.load();
+  }
+
+  async remove(id: number): Promise<void> {
+    await firstValueFrom(this.http.delete<void>(`/api/products/${id}`));
+    await this.load();
+  }
+  async uploadImage(file: File): Promise<string> {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await firstValueFrom(this.http.post<{ url: string }>('/api/uploads', body));
+    return res.url;
+  }
+
+  private toApi(p: Product) {
+    return { ...p, image: p.image || null };
+  }
 
   getAll(): Product[] { return this.products; }
   getFeatured(): Product[] { return this.products.slice(0, 4); }
